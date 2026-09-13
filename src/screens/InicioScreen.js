@@ -1,0 +1,14 @@
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, useColorScheme, useWindowDimensions, View } from 'react-native';
+import { listLocal } from '../database';
+
+export default function InicioScreen({ navigation }) {
+  const [reservas, setReservas] = useState([]);
+  const { width } = useWindowDimensions();
+  const dark = useColorScheme() === 'dark';
+  useFocusEffect(useCallback(() => { listLocal().then(setReservas); }, []));
+  const stats = ['Pendientes', reservas.filter((r) => r.estado === 'Pendiente').length, 'Confirmadas', reservas.filter((r) => r.estado === 'Confirmada').length];
+  return <ScrollView style={[styles.page, dark && styles.dark]} contentContainerStyle={styles.content}><View style={styles.hero}><Text style={styles.eyebrow}>OPERACION DIARIA</Text><Text style={styles.title}>Todo en orden.</Text><Text style={styles.heroText}>La agenda de Zona 8, incluso cuando la conexion se toma un descanso.</Text></View><View style={[styles.grid, { flexDirection: width < 420 ? 'column' : 'row' }]}>{[0, 2].map((index) => <View key={stats[index]} style={styles.stat}><Text style={styles.statValue}>{stats[index + 1]}</Text><Text style={styles.statLabel}>{stats[index]}</Text></View>)}</View><Pressable accessibilityRole="button" accessibilityLabel="Abrir agenda de reservas" onPress={() => navigation.navigate('Agenda', { screen: 'Reservas' })} style={styles.action}><Text style={styles.actionText}>Abrir agenda de reservas</Text></Pressable><Text style={styles.sectionTitle}>Tres frentes</Text><View style={styles.list}><Text style={styles.item}>01  Reservas y anticipos</Text><Text style={styles.item}>02  Ocupacion por cancha</Text><Text style={styles.item}>03  Perfil y reglas del negocio</Text></View></ScrollView>;
+}
+const styles = StyleSheet.create({ page: { flex: 1, backgroundColor: '#f4f7f9' }, dark: { backgroundColor: '#101820' }, content: { padding: 20, gap: 16 }, hero: { backgroundColor: '#102a43', padding: 24, borderRadius: 16 }, eyebrow: { color: '#7dd3fc', fontWeight: '800', letterSpacing: 1.5 }, title: { color: '#fff', fontSize: 36, fontWeight: '900', marginTop: 8 }, heroText: { color: '#d9e2ec', fontSize: 16, lineHeight: 23, marginTop: 10 }, grid: { gap: 12 }, stat: { backgroundColor: '#fff', borderRadius: 12, padding: 18, flex: 1, borderLeftWidth: 4, borderLeftColor: '#f59e0b' }, statValue: { fontSize: 30, fontWeight: '900', color: '#102a43' }, statLabel: { color: '#52606d', marginTop: 4 }, action: { backgroundColor: '#0ea5a4', padding: 16, borderRadius: 10, alignItems: 'center' }, actionText: { color: '#fff', fontWeight: '800' }, sectionTitle: { fontSize: 20, fontWeight: '800', color: '#102a43', marginTop: 8 }, list: { backgroundColor: '#fff', padding: 18, borderRadius: 12, gap: 14 }, item: { color: '#334e68', fontWeight: '700' } });
