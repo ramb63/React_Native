@@ -1,4 +1,4 @@
-const BASE_URL = 'https://dummyjson.com';
+const BASE_URL = (process.env.EXPO_PUBLIC_API_URL || 'https://dummyjson.com').replace(/\/$/, '');
 
 async function request(path, options = {}) {
   const response = await fetch(`${BASE_URL}${path}`, {

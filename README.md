@@ -15,6 +15,8 @@ Aplicación móvil en React Native con Expo SDK 54 y JavaScript para gestionar r
 
 La entidad `reserva` se adapta al recurso `/posts`: listado `GET /posts`, detalle `GET /posts/{id}`, alta `POST /posts/add`, edición `PATCH /posts/{id}`, eliminación `DELETE /posts/{id}`, login `POST /auth/login` y sesión `GET /auth/me`.
 
+> Importante: `https://dummyjson.com` es solo un mock de demostración. No es la base compartida de la aplicación y sus cambios no garantizan persistencia entre web y Expo Go. Para sincronizar ambas plataformas, define `EXPO_PUBLIC_API_URL` con la URL de un backend persistente que implemente esos mismos endpoints.
+
 ## Objetivo
 
 La app permite:
@@ -67,7 +69,7 @@ Escanea el código QR desde Expo Go. Para probar la versión web usa `npx expo s
 
 ## Probar la API y el modo offline
 
-La API remota está en [src/services/api.js](src/services/api.js). La app siempre lee desde SQLite, de modo que puede mostrar reservas sin internet.
+La API remota está en [src/services/api.js](src/services/api.js). La app siempre lee desde SQLite, de modo que puede mostrar reservas sin internet. Para usar un backend real, inicia Expo con una variable como `EXPO_PUBLIC_API_URL=https://tu-backend.example.com` (en Windows PowerShell: `$env:EXPO_PUBLIC_API_URL="https://tu-backend.example.com"; npx expo start -c`).
 
 Para probar el modo offline, inicia sesión, activa modo avión, crea o cambia una reserva y verifica el indicador `Sin conexion`. La operación se guarda en `pending_operations`. Al recuperar conexión, NetInfo dispara la sincronización y se reintenta la cola.
 
